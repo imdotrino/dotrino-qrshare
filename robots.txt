@@ -1,0 +1,7 @@
+# Solo la cáscara pública de la herramienta es indexable.
+# El contenido de usuario (pronósticos, salas, chats, transferencias) viaja por
+# #fragment y nunca llega al servidor: no es indexable y así debe seguir.
+User-agent: *
+Allow: /
+
+Sitemap: https://qrshare.dotrino.com/sitemap.xml

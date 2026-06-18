@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRShare - P2P File Transfer</title>
+    <meta name="theme-color" content="#e5e7eb" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="description" content="Transferencia de archivos P2P por WebRTC. El proxy solo descubre los peers; los archivos viajan directo entre dispositivos. Compartí por QR." />
+  <link rel="canonical" href="https://qrshare.dotrino.com/" />
+  <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="Dotrino" />
+  <meta property="og:title" content="QRShare" />
+  <meta property="og:description" content="Transferencia de archivos P2P por WebRTC. Compartí por QR." />
+  <meta property="og:url" content="https://qrshare.dotrino.com/" />
+  <meta property="og:image" content="https://qrshare.dotrino.com/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="QRShare" />
+  <meta name="twitter:description" content="Transferencia de archivos P2P por WebRTC. Compartí por QR." />
+  <meta name="twitter:image" content="https://qrshare.dotrino.com/og.jpg" />
+  <link rel="stylesheet" href="styles.css">
+  <!-- Analítica cookieless autohosteada (GoatCounter); no cuenta en localhost/LAN. -->
+  <script>window.goatcounter={path:function(p){return location.hostname+p}}</script>
+  <script data-goatcounter="https://goat.dotrino.com/count" async src="https://goat.dotrino.com/count.js"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "QRShare",
+      "url": "https://qrshare.dotrino.com/",
+      "description": "Transferencia de archivos P2P por WebRTC. Compartí por QR.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": { "@type": "Organization", "name": "Dotrino", "url": "https://dotrino.com/" }
+    }
+    </script>
+</head>
+<body>
+  <dotrino-support floating href="https://ko-fi.com/dotrino"></dotrino-support>
+  <dotrino-back floating style="top:14px;left:14px;color:#e2e8f0;--cc-back-bg:rgba(15,23,42,.55);--cc-back-bg-hover:rgba(15,23,42,.8)"></dotrino-back>
+  <div id="app"></div>
+
+  <!-- QR Code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
+  <!-- App -->
+  <script src="app.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/support@0.4/src/index.js"></script>
+  <!-- Navegación "volver" unificada del ecosistema. QRShare no tiene header
+       persistente (se renderiza en #app), así que el chevron va flotante
+       arriba-izquierda; sin nada que cerrar → dotrino.com. -->
+  <script type="module">
+    import { createBackNav } from 'https://cdn.jsdelivr.net/npm/@dotrino/nav@0.2/src/index.js'
+    createBackNav()
+  </script>
+</body>
+</html>
