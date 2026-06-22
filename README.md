@@ -1,5 +1,7 @@
 # QRShare Web - P2P File Transfer con WebRTC
 
+> **Parte del ecosistema [Dotrino](https://dotrino.com).** Misión: aplicaciones que resuelven problemas comunes, respetando tu privacidad — sin anuncios, sin cookies, sin rastreo de datos, sin vender tu identidad a nadie.
+
 App web pura (HTML + CSS + JavaScript) para compartir archivos P2P usando WebRTC y el proxy WebSocket de Dotrino.
 
 ## Cómo usar
