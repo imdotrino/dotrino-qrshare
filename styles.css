@@ -4,10 +4,26 @@
   box-sizing: border-box;
 }
 
+/* Tema de la barra superior estándar del ecosistema (<dotrino-topbar>, §5). */
+dotrino-topbar {
+  --dotrino-topbar-bg: rgba(15, 23, 42, .82);
+  --dotrino-topbar-border: rgba(255, 255, 255, .14);
+  --dotrino-topbar-text: #e2e8f0;
+  --dotrino-topbar-muted: #9ca3af;
+  --dotrino-topbar-accent: #667eea;
+  --dotrino-topbar-accent-text: #fff;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#main {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
