@@ -27,6 +27,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
+      - name: Inyectar meta de commit
+        run: |
+          COMMIT=${GITHUB_SHA::7}
+          sed -i "s|</head>|  <meta name=\"commit\" content=\"$COMMIT\" />\\n</head>|" index.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
