@@ -7,20 +7,20 @@
     <meta name="theme-color" content="#e5e7eb" />
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <meta name="description" content="Transferencia de archivos P2P por WebRTC. El proxy solo descubre los peers; los archivos viajan directo entre dispositivos. Compartí por QR." />
+  <meta name="description" content="Transferencia de archivos P2P por WebRTC. El proxy solo descubre los peers; los archivos viajan directo entre dispositivos. Comparte por QR." />
   <link rel="canonical" href="https://qrshare.dotrino.com/" />
   <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
   <meta property="og:site_name" content="Dotrino" />
   <meta property="og:title" content="QRShare" />
-  <meta property="og:description" content="Transferencia de archivos P2P por WebRTC. Compartí por QR." />
+  <meta property="og:description" content="Transferencia de archivos P2P por WebRTC. Comparte por QR." />
   <meta property="og:url" content="https://qrshare.dotrino.com/" />
   <meta property="og:image" content="https://qrshare.dotrino.com/og.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="QRShare" />
-  <meta name="twitter:description" content="Transferencia de archivos P2P por WebRTC. Compartí por QR." />
+  <meta name="twitter:description" content="Transferencia de archivos P2P por WebRTC. Comparte por QR." />
   <meta name="twitter:image" content="https://qrshare.dotrino.com/og.jpg" />
   <link rel="stylesheet" href="styles.css">
   <!-- Barra superior estándar del ecosistema (@dotrino/topbar, CONVENCIONES §5/§6.1).
@@ -37,13 +37,19 @@
       "@type": "WebApplication",
       "name": "QRShare",
       "url": "https://qrshare.dotrino.com/",
-      "description": "Transferencia de archivos P2P por WebRTC. Compartí por QR.",
+      "description": "Transferencia de archivos P2P por WebRTC. Comparte por QR.",
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Web",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "publisher": { "@type": "Organization", "name": "Dotrino", "url": "https://dotrino.com/" }
     }
     </script>
+  <!-- PWA (CONVENCIONES §3): manifiesto, tema e iconos de pantalla de inicio. -->
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="QRShare" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
 </head>
 <body>
   <dotrino-topbar brand="QRShare" icon="./icon.svg"
@@ -58,5 +64,13 @@
   <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
   <!-- App -->
   <script src="app.js"></script>
+  <script>
+    // Registro del service worker (§3): la app queda disponible sin conexión.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {})
+      })
+    }
+  </script>
 </body>
 </html>
