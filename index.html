@@ -62,8 +62,10 @@
 
   <!-- QR Code library -->
   <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
-  <!-- App -->
-  <script src="app.js"></script>
+  <!-- App. Es un MÓDULO porque importa el pilar del transporte
+       (@dotrino/proxy-client) y el sellado de @dotrino/identity desde jsDelivr,
+       siempre por `+esm` (los imports desnudos no resuelven en el navegador). -->
+  <script type="module" src="app.js"></script>
   <script>
     // Registro del service worker (§3): la app queda disponible sin conexión.
     if ('serviceWorker' in navigator) {

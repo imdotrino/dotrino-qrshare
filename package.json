@@ -1,0 +1,17 @@
+{
+  "name": "dotrino-qrshare",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "QRShare — transferencia de archivos P2P con señalización sellada extremo a extremo",
+  "scripts": {
+    "serve": "python3 -m http.server 8788 --bind 127.0.0.1",
+    "test:e2e": "node test/sealed-signaling.e2e.mjs"
+  },
+  "devDependencies": {
+    "jsqr": "1.4.0",
+    "playwright": "1.62.0",
+    "pngjs": "5.0.0"
+  },
+  "license": "MIT"
+}
