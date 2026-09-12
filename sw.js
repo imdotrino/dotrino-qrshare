@@ -1,7 +1,7 @@
 // Service worker estándar del ecosistema (§3): navegación network-first (los
 // deploys se ven al instante; offline cae a caché), resto cache-first con refresco
 // en segundo plano. Subir N de CACHE en cada cambio de assets cacheados.
-const CACHE = 'qrshare-v2';
+const CACHE = 'qrshare-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -31,8 +31,8 @@ self.addEventListener('fetch', e => {
   // Nunca interceptar otros orígenes (store.dotrino.com, jsDelivr, GoatCounter…).
   if (url.origin !== self.location.origin) return;
 
-  const esNavegacion = e.request.mode === 'navigate' || e.request.destination === 'document';
-  if (esNavegacion) {
+  const isNavigation = e.request.mode === 'navigate' || e.request.destination === 'document';
+  if (isNavigation) {
     e.respondWith(
       fetch(e.request).then(res => {
         const copy = res.clone();
