@@ -425,7 +425,7 @@ class QRShareApp {
     try {
       url = this.pairingUrl();
     } catch (error) {
-      this.reportFailure('Todavía no hay conexión con el proxio', error);
+      this.reportFailure('Todavía no hay conexión', error);
       return;
     }
 
