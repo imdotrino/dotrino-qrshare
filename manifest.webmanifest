@@ -9,8 +9,8 @@
   },
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#ffffff",
-  "theme_color": "#e5e7eb",
+  "background_color": "#f7fafc",
+  "theme_color": "#00658c",
   "icons": [
     {
       "src": "icon-192.png",

@@ -4,19 +4,10 @@
   box-sizing: border-box;
 }
 
-/* Tema de la barra superior estándar del ecosistema (<dotrino-topbar>, §5). */
-dotrino-topbar {
-  --dotrino-topbar-bg: rgba(15, 23, 42, .82);
-  --dotrino-topbar-border: rgba(255, 255, 255, .14);
-  --dotrino-topbar-text: #e2e8f0;
-  --dotrino-topbar-muted: #9ca3af;
-  --dotrino-topbar-accent: #667eea;
-  --dotrino-topbar-accent-text: #fff;
-}
-
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: var(--dt-font);
+  background: var(--dt-bg);
+  color: var(--dt-text);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -37,41 +28,41 @@ body {
 
 /* Sender Layout */
 .sender-container {
-  background: white;
+  background: var(--dt-surface);
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: var(--dt-shadow);
   padding: 40px;
 }
 
 .sender-container h1 {
-  color: #2563eb;
+  color: var(--dt-accent);
   font-size: 2em;
   margin-bottom: 10px;
 }
 
 .sender-container .subtitle {
-  color: #6b7280;
+  color: var(--dt-text-dim);
   margin-bottom: 30px;
   font-size: 0.95em;
 }
 
 /* Receiver Layout */
 .receiver-container {
-  background: white;
+  background: var(--dt-surface);
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: var(--dt-shadow);
   padding: 40px;
   text-align: center;
 }
 
 .receiver-container h1 {
-  color: #2563eb;
+  color: var(--dt-accent);
   font-size: 2em;
   margin-bottom: 10px;
 }
 
 .receiver-container .subtitle {
-  color: #6b7280;
+  color: var(--dt-text-dim);
   margin-bottom: 30px;
 }
 
@@ -87,23 +78,23 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  background: linear-gradient(135deg, var(--dt-accent), var(--dt-accent-press));
+  color: var(--dt-accent-ink);
+  box-shadow: 0 4px 12px var(--dt-shadow-color);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 16px var(--dt-shadow-color);
 }
 
 .btn-secondary {
-  background: #e5e7eb;
-  color: #1f2937;
+  background: var(--dt-line-soft);
+  color: var(--dt-text);
 }
 
 .btn-secondary:hover {
-  background: #d1d5db;
+  background: var(--dt-line);
 }
 
 /* File input */
@@ -119,25 +110,25 @@ body {
 }
 
 .files-table thead {
-  background: #f3f4f6;
+  background: var(--dt-surface-2);
 }
 
 .files-table th {
   padding: 12px;
   text-align: left;
-  color: #374151;
+  color: var(--dt-text);
   font-weight: 600;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--dt-line-soft);
 }
 
 .files-table td {
   padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
-  color: #6b7280;
+  border-bottom: 1px solid var(--dt-line-soft);
+  color: var(--dt-text-dim);
 }
 
 .file-name {
-  color: #1f2937;
+  color: var(--dt-text);
   font-weight: 500;
 }
 
@@ -154,28 +145,28 @@ body {
 }
 
 .status-pending {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--dt-surface-2);
+  color: var(--dt-busy);
 }
 
 .status-shared {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--dt-accent-soft);
+  color: var(--dt-accent-press);
 }
 
 .status-transferring {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--dt-accent-soft);
+  color: var(--dt-accent-press);
 }
 
 .status-sent {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--dt-mint-soft);
+  color: var(--dt-mint);
 }
 
 .status-completed {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--dt-mint-soft);
+  color: var(--dt-mint);
 }
 
 /* Modal QR */
@@ -197,12 +188,12 @@ body {
 }
 
 .modal-content {
-  background: white;
+  background: var(--dt-surface);
   border-radius: 16px;
   padding: 40px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: var(--dt-shadow);
   position: relative;
 }
 
@@ -213,16 +204,16 @@ body {
   background: none;
   border: none;
   font-size: 24px;
-  color: #6b7280;
+  color: var(--dt-text-dim);
   cursor: pointer;
 }
 
 .modal-close:hover {
-  color: #1f2937;
+  color: var(--dt-text);
 }
 
 .modal h2 {
-  color: #1f2937;
+  color: var(--dt-text);
   margin-bottom: 20px;
   font-size: 1.3em;
 }
@@ -233,7 +224,7 @@ body {
 }
 
 .file-info-modal {
-  background: #f3f4f6;
+  background: var(--dt-surface-2);
   border-radius: 8px;
   padding: 16px;
   margin: 20px 0;
@@ -242,11 +233,11 @@ body {
 .file-info-modal p {
   margin: 8px 0;
   font-size: 0.9em;
-  color: #6b7280;
+  color: var(--dt-text-dim);
 }
 
 .file-info-modal strong {
-  color: #1f2937;
+  color: var(--dt-text);
 }
 
 #transferProgress {
@@ -257,7 +248,7 @@ body {
 #progressBar {
   width: 100%;
   height: 8px;
-  background: #e5e7eb;
+  background: var(--dt-line-soft);
   border-radius: 4px;
   overflow: hidden;
   margin: 12px 0;
@@ -265,44 +256,44 @@ body {
 
 #progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #2563eb, #667eea);
+  background: linear-gradient(90deg, var(--dt-accent), var(--dt-accent));
   width: 0%;
   transition: width 0.2s ease;
 }
 
 #progressText {
   font-size: 0.85em;
-  color: #6b7280;
+  color: var(--dt-text-dim);
   text-align: center;
 }
 
 /* Receiver Status */
 #receiverStatus {
   font-size: 1em;
-  color: #374151;
+  color: var(--dt-text);
   min-height: 24px;
   margin: 20px 0;
 }
 
 #fileInfoReceiver {
-  background: #f3f4f6;
+  background: var(--dt-surface-2);
   border-radius: 12px;
   padding: 20px;
   margin: 20px 0;
   display: none;
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid var(--dt-accent);
   text-align: left;
 }
 
 .receiver-file-name {
   font-weight: 600;
   font-size: 1.1em;
-  color: #1f2937;
+  color: var(--dt-text);
   margin-bottom: 8px;
 }
 
 .receiver-file-detail {
-  color: #6b7280;
+  color: var(--dt-text-dim);
   font-size: 0.9em;
   margin: 4px 0;
 }
@@ -315,8 +306,8 @@ body {
 #downloadBtn {
   display: none;
   padding: 14px 32px;
-  background: linear-gradient(135deg, #16a34a, #15803d);
-  color: white;
+  background: linear-gradient(135deg, var(--dt-ok), var(--dt-mint));
+  color: var(--dt-accent-ink);
   border: none;
   border-radius: 8px;
   font-size: 1em;
@@ -324,12 +315,12 @@ body {
   cursor: pointer;
   margin-top: 20px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+  box-shadow: 0 4px 12px var(--dt-shadow-color);
 }
 
 #downloadBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
+  box-shadow: 0 6px 16px var(--dt-shadow-color);
 }
 
 /* Spinner */
@@ -337,8 +328,8 @@ body {
   display: inline-block;
   width: 12px;
   height: 12px;
-  border: 2px solid #e5e7eb;
-  border-top-color: #2563eb;
+  border: 2px solid var(--dt-line-soft);
+  border-top-color: var(--dt-accent);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
   margin-right: 8px;
@@ -350,28 +341,28 @@ body {
 
 /* Status messages */
 .error {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--dt-error-soft);
+  color: var(--dt-error);
   padding: 12px 16px;
   border-radius: 8px;
   margin: 16px 0;
-  border-left: 4px solid #dc2626;
+  border-left: 4px solid var(--dt-error);
 }
 
 .success {
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--dt-mint-soft);
+  color: var(--dt-ok);
   padding: 12px 16px;
   border-radius: 8px;
   margin: 16px 0;
-  border-left: 4px solid #16a34a;
+  border-left: 4px solid var(--dt-ok);
 }
 
 /* Empty state */
 .empty-state {
   text-align: center;
   padding: 40px 20px;
-  color: #6b7280;
+  color: var(--dt-text-dim);
 }
 
 .empty-state p {

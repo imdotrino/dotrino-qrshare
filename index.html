@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QRShare - P2P File Transfer</title>
-    <meta name="theme-color" content="#e5e7eb" />
+    <meta name="theme-color" content="#00658c" />
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta name="description" content="Envía un archivo de un dispositivo a otro escaneando un código QR. Viaja directo entre los dos, sin subirse a ningún servidor." />
@@ -22,12 +22,13 @@
   <meta name="twitter:title" content="QRShare" />
   <meta name="twitter:description" content="Transferencia de archivos P2P por WebRTC. Comparte por QR." />
   <meta name="twitter:image" content="https://qrshare.dotrino.com/og.jpg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@dotrino/theme@0.1/src/theme.css">
   <link rel="stylesheet" href="styles.css">
   <!-- Barra superior estándar del ecosistema (@dotrino/topbar, CONVENCIONES §5/§6.1).
        OJO: por CDN va SIEMPRE con +esm, no con /src/index.js (sus imports desnudos
        no resuelven en el navegador). Trae dentro <dotrino-back>, <dotrino-support>,
        toggle de idioma y botón de perfil. -->
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/topbar@0.5/+esm"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/topbar@0.16/+esm"></script>
   <!-- Analítica cookieless autohosteada (GoatCounter); no cuenta en localhost/LAN. -->
   <script>window.goatcounter={path:function(p){return location.hostname+p}}</script>
   <script data-goatcounter="https://goat.dotrino.com/count" async src="https://goat.dotrino.com/count.js"></script>
@@ -56,7 +57,7 @@
   <dotrino-topbar brand="QRShare" icon="./icon.svg"
     support-repo="imdotrino/dotrino-qrshare"
     support-discord="https://discord.gg/D648uq7cth"
-    profile no-lang></dotrino-topbar>
+    profile theme no-lang></dotrino-topbar>
   <main id="main">
     <div id="app"></div>
   </main>
