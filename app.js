@@ -35,6 +35,7 @@ import {
   signData,
 } from 'https://cdn.jsdelivr.net/npm/@dotrino/proxy-client@0.19/+esm';
 import * as contentCrypto from 'https://cdn.jsdelivr.net/npm/@dotrino/identity@0.89/content/+esm';
+import { qrSvg } from 'https://cdn.jsdelivr.net/npm/@dotrino/qr@0.2/svg/+esm';
 
 // El sellado del pilar es `wrapForMember`/`openWrap` de `@dotrino/identity/content`,
 // la misma cripto de los secretos sellados del vault. Se inyecta aquí, en vez de
@@ -432,28 +433,11 @@ class QRShareApp {
     document.getElementById('modalFileName').textContent = fileInfo.name;
     document.getElementById('modalFileUrl').textContent = url;
 
+    // El QR del ecosistema (@dotrino/qr): se dibuja en el cliente, negro sobre blanco.
     const qrContainer = document.getElementById('qrContainer');
-    qrContainer.innerHTML = '';
-
-    try {
-      const qrCode = new QRCodeStyling({
-        width: 240,
-        height: 240,
-        type: 'svg',
-        data: url,
-        dotsOptions: {
-          color: '#000000',
-          type: 'square'
-        },
-        backgroundOptions: {
-          color: '#ffffff'
-        }
-      });
-      qrCode.append(qrContainer);
-    } catch (error) {
-      console.error('[qrshare] could not render the QR:', error);
-      qrContainer.innerHTML = `<div style="padding: 20px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 8px;"><p><strong>URL:</strong></p><p style="word-break: break-all; font-family: monospace; font-size: 0.9em;">${url}</p></div>`;
-    }
+    qrContainer.innerHTML = qrSvg(url);
+    qrContainer.firstElementChild.setAttribute('width', '240');
+    qrContainer.firstElementChild.setAttribute('height', '240');
 
     document.getElementById('qrModal').classList.add('show');
     this.currentFileId = fileId;
