@@ -477,18 +477,34 @@ class QRShareApp {
       }
     }
     else if (msg.type === 'ice') {
-      if (this.pc && msg.candidate) {
-        this.pc.addIceCandidate(new RTCIceCandidate(msg.candidate))
-          .catch(e => console.warn('[qrshare] ICE error:', e));
+      this.addRemoteCandidate(msg.candidate);
+    }
+  }
+
+  /** La conexión directa de las dos puntas: los mismos STUN y la misma salida de candidatos. */
+  newPeerConnection () {
+    const pc = new RTCPeerConnection({ iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' }
+    ] });
+    pc.onicecandidate = (e) => {
+      if (e.candidate) {
+        this.sendSignal({ type: 'ice', candidate: e.candidate })
+          .catch((error) => this.reportFailure('No se pudo enviar un candidato', error));
       }
+    };
+    return pc;
+  }
+
+  addRemoteCandidate (candidate) {
+    if (this.pc && candidate) {
+      this.pc.addIceCandidate(new RTCIceCandidate(candidate))
+        .catch(e => console.warn('[qrshare] ICE error:', e));
     }
   }
 
   async createOffer (fileId) {
-    this.pc = new RTCPeerConnection({ iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' }
-    ] });
+    this.pc = this.newPeerConnection();
     this.dc = this.pc.createDataChannel('fileTransfer', { ordered: true });
 
     this.dc.onopen = () => {
@@ -496,12 +512,6 @@ class QRShareApp {
       this.startSendingFile(fileId);
     };
 
-    this.pc.onicecandidate = (e) => {
-      if (e.candidate) {
-        this.sendSignal({ type: 'ice', candidate: e.candidate })
-          .catch((error) => this.reportFailure('No se pudo enviar un candidato', error));
-      }
-    };
 
     const offer = await this.pc.createOffer();
     await this.pc.setLocalDescription(offer);
@@ -650,25 +660,13 @@ class QRShareApp {
       });
     }
     else if (msg.type === 'ice') {
-      if (this.pc && msg.candidate) {
-        this.pc.addIceCandidate(new RTCIceCandidate(msg.candidate))
-          .catch(e => console.warn('[qrshare] ICE error:', e));
-      }
+      this.addRemoteCandidate(msg.candidate);
     }
   }
 
   async createAnswer (offer) {
-    this.pc = new RTCPeerConnection({ iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' }
-    ] });
+    this.pc = this.newPeerConnection();
 
-    this.pc.onicecandidate = (e) => {
-      if (e.candidate) {
-        this.sendSignal({ type: 'ice', candidate: e.candidate })
-          .catch((error) => this.reportFailure('No se pudo enviar un candidato', error));
-      }
-    };
 
     this.pc.ondatachannel = (e) => {
       this.dc = e.channel;
