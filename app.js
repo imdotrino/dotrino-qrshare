@@ -281,7 +281,7 @@ class QRShareApp {
     app.innerHTML = `
       <div class="sender-container">
         <h1>QRShare</h1>
-        <p class="subtitle">Comparte archivos P2P con WebRTC</p>
+        <p class="subtitle">Envía un archivo a otro dispositivo escaneando un código QR</p>
 
         <div id="appError" class="error" style="display: none;"></div>
 
