@@ -109,7 +109,7 @@ check('el archivo llega entero y byte a byte igual',
   `${got.length} de ${payload.length} bytes`)
 
 await B.page.waitForFunction(
-  () => /completada/i.test(document.querySelector('[data-testid="receiver-status"]')?.textContent || ''),
+  () => /completad|completed/i.test(document.querySelector('[data-testid="receiver-status"]')?.textContent || ''),
   null, { timeout: 30000 })
 check('el receptor la da por completada', true)
 

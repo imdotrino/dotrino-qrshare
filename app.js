@@ -56,6 +56,130 @@ setKeypairStore({
 
 const PROXY_URL = 'wss://proxy.dotrino.com';
 
+// ===== IDIOMA (CONVENCIONES §9: bilingüe es/en) =====
+// El toggle vive en <dotrino-topbar>: persiste la elección en `dotrino.lang`, pone
+// `document.documentElement.lang` y avisa con el evento `dotrino-lang`. Aquí solo
+// se lee lo que él decidió y se traduce lo de la app. Mismo patrón que la landing
+// de @dotrino/install (web/index.html).
+const I18N = {
+  es: {
+    title: 'QRShare — envía archivos con un código QR',
+    senderSubtitle: 'Envía un archivo a otro dispositivo escaneando un código QR',
+    selectFile: 'Seleccionar archivo',
+    colFile: 'Archivo',
+    colSize: 'Tamaño',
+    colStatus: 'Estado',
+    colActions: 'Acciones',
+    emptyTitle: 'No hay archivos seleccionados',
+    emptyHint: 'Haz clic en «Seleccionar archivo» para comenzar',
+    close: 'Cerrar',
+    shareFile: 'Compartir archivo',
+    fileLabel: 'Archivo:',
+    urlLabel: 'Enlace:',
+    progressLabel: 'Progreso de la transferencia:',
+    copyUrl: 'Copiar enlace',
+    share: 'Compartir',
+    showQr: 'Ver QR',
+    statusPending: 'Pendiente',
+    statusTransferring: 'Transfiriendo {progress}%',
+    statusSent: 'Enviado',
+    statusCompleted: 'Completado',
+    statusShared: 'Compartido',
+    receiverSubtitle: 'Recepción de archivo',
+    connecting: 'Conectando...',
+    download: 'Descargar archivo',
+    waitingFile: 'Esperando archivo...',
+    receiving: 'Recibiendo...',
+    transferError: 'Error en la transferencia',
+    transferDone: '✓ Transferencia completada',
+    staleLink: 'Este enlace no sirve para recibir un archivo: es de una versión anterior de la app o está incompleto. Pide al otro dispositivo que muestre el QR de nuevo.',
+    startOver: 'Empezar de nuevo',
+    errConnect: 'No se pudo conectar',
+    errIdentify: 'No se pudo identificar',
+    errUnsealed: 'Se descartó un mensaje sin sellar',
+    errUndecipherable: 'Llegó un mensaje que no es para este dispositivo',
+    errNotReady: 'Todavía no hay conexión',
+    errCopy: 'No se pudo copiar el enlace',
+    errNoPeerKeys: 'El otro dispositivo no envió sus llaves',
+    errOffer: 'No se pudo enviar la oferta',
+    errAnswer: 'Respuesta inválida',
+    errCandidate: 'No se pudo enviar un candidato',
+    errHello: 'No se pudo avisar al emisor',
+    errReply: 'No se pudo responder a la oferta',
+  },
+  en: {
+    title: 'QRShare — send files with a QR code',
+    senderSubtitle: 'Send a file to another device by scanning a QR code',
+    selectFile: 'Select file',
+    colFile: 'File',
+    colSize: 'Size',
+    colStatus: 'Status',
+    colActions: 'Actions',
+    emptyTitle: 'No files selected',
+    emptyHint: 'Click “Select file” to get started',
+    close: 'Close',
+    shareFile: 'Share file',
+    fileLabel: 'File:',
+    urlLabel: 'Link:',
+    progressLabel: 'Transfer progress:',
+    copyUrl: 'Copy link',
+    share: 'Share',
+    showQr: 'Show QR',
+    statusPending: 'Pending',
+    statusTransferring: 'Transferring {progress}%',
+    statusSent: 'Sent',
+    statusCompleted: 'Completed',
+    statusShared: 'Shared',
+    receiverSubtitle: 'Receiving a file',
+    connecting: 'Connecting...',
+    download: 'Download file',
+    waitingFile: 'Waiting for the file...',
+    receiving: 'Receiving...',
+    transferError: 'Transfer error',
+    transferDone: '✓ Transfer completed',
+    staleLink: 'This link cannot receive a file: it comes from an older version of the app or it is incomplete. Ask the other device to show the QR again.',
+    startOver: 'Start over',
+    errConnect: 'Could not connect',
+    errIdentify: 'Could not identify this device',
+    errUnsealed: 'An unsealed message was discarded',
+    errUndecipherable: 'A message arrived that is not for this device',
+    errNotReady: 'Not connected yet',
+    errCopy: 'Could not copy the link',
+    errNoPeerKeys: 'The other device did not send its keys',
+    errOffer: 'Could not send the offer',
+    errAnswer: 'Invalid answer',
+    errCandidate: 'Could not send a candidate',
+    errHello: 'Could not notify the sender',
+    errReply: 'Could not reply to the offer',
+  },
+};
+
+/** El idioma vigente: el que eligió el usuario en el topbar, o el del navegador. */
+function currentLang () {
+  const docLang = (document.documentElement.lang || '').toLowerCase();
+  if (docLang === 'es' || docLang === 'en') return docLang;
+  let saved = null;
+  try { saved = localStorage.getItem('dotrino.lang'); } catch (_) {}
+  if (saved === 'es' || saved === 'en') return saved;
+  return (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+}
+
+/** Traduce una clave, con `{nombre}` sustituido por `vars.nombre`. */
+function t (key, vars = {}) {
+  const dict = I18N[currentLang()] || I18N.es;
+  const text = dict[key];
+  if (text === undefined) throw errorWithCode(`missing i18n key: ${key}`, 'i18n-missing');
+  return text.replace(/\{(\w+)\}/g, (_, name) => String(vars[name] ?? ''));
+}
+
+/** Vuelve a pintar los textos estáticos marcados con `data-i18n*` (sin perder estado). */
+function applyI18n (root = document) {
+  root.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  root.querySelectorAll('[data-i18n-aria]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+  root.querySelectorAll('[data-i18n-title]').forEach((el) => { el.setAttribute('title', t(el.dataset.i18nTitle)); });
+  document.title = t('title');
+}
+
 /** Versión del código de emparejamiento que viaja en el QR. */
 const PAIRING_VERSION = '1';
 
@@ -115,8 +239,12 @@ class QRShareApp {
     this.receivedBytes = 0;
     this._identified = null;
 
+    this._status = null;
+
     // Asa para las pruebas de punta a punta (§5: las apps se prueban con Playwright).
     window.qrshareApp = this;
+
+    document.addEventListener('dotrino-lang', () => this.onLangChange());
 
     this.init();
   }
@@ -128,7 +256,7 @@ class QRShareApp {
     try {
       await this.connect();
     } catch (error) {
-      this.reportFailure('No se pudo conectar', error);
+      this.reportFailure(t('errConnect'), error);
     }
   }
 
@@ -177,7 +305,7 @@ class QRShareApp {
     // anterior: hay que volver a identificarse o nadie puede escribirnos.
     this.client.on('token', () => {
       this._identified = this.identifySelf();
-      this._identified.catch((error) => this.reportFailure('No se pudo identificar', error));
+      this._identified.catch((error) => this.reportFailure(t('errIdentify'), error));
     });
 
     await this.client.connect();
@@ -233,7 +361,7 @@ class QRShareApp {
    */
   onSignal (payload, meta, from) {
     if (!meta || meta.sealed !== true) {
-      this.reportFailure('Se descartó un mensaje sin sellar', errorWithCode(
+      this.reportFailure(t('errUnsealed'), errorWithCode(
         `rejected an unsealed message from ${from}`, 'unsealed'));
       return;
     }
@@ -244,12 +372,12 @@ class QRShareApp {
   onTransportError (error) {
     const code = error && error.type;
     if (code === 'unsealed') {
-      this.reportFailure('Se descartó un mensaje sin sellar', errorWithCode(
+      this.reportFailure(t('errUnsealed'), errorWithCode(
         `transport dropped a plaintext message (${error.reason})`, 'unsealed'));
       return;
     }
     if (code === 'undecipherable') {
-      this.reportFailure('Llegó un mensaje que no es para este dispositivo', errorWithCode(
+      this.reportFailure(t('errUndecipherable'), errorWithCode(
         'sealed for somebody else, or tampered with', 'undecipherable'));
       return;
     }
@@ -281,20 +409,20 @@ class QRShareApp {
     app.innerHTML = `
       <div class="sender-container">
         <h1>QRShare</h1>
-        <p class="subtitle">Envía un archivo a otro dispositivo escaneando un código QR</p>
+        <p class="subtitle" data-i18n="senderSubtitle"></p>
 
         <div id="appError" class="error" style="display: none;"></div>
 
-        <button id="selectBtn" class="btn btn-primary" data-testid="select-file">Seleccionar Archivo</button>
+        <button id="selectBtn" class="btn btn-primary" data-testid="select-file" data-i18n="selectFile"></button>
         <input type="file" id="fileInput" />
 
         <table class="files-table" style="display: none;">
           <thead>
             <tr>
-              <th>Archivo</th>
-              <th>Tamaño</th>
-              <th>Estado</th>
-              <th>Acciones</th>
+              <th data-i18n="colFile"></th>
+              <th data-i18n="colSize"></th>
+              <th data-i18n="colStatus"></th>
+              <th data-i18n="colActions"></th>
             </tr>
           </thead>
           <tbody id="filesTableBody">
@@ -302,29 +430,30 @@ class QRShareApp {
         </table>
 
         <div class="empty-state" id="emptyState">
-          <p>No hay archivos seleccionados</p>
-          <p>Haz clic en "Seleccionar Archivo" para comenzar</p>
+          <p data-i18n="emptyTitle"></p>
+          <p data-i18n="emptyHint"></p>
         </div>
       </div>
 
       <div id="qrModal" class="modal">
         <div class="modal-content">
-          <button class="modal-close" id="closeModal">&times;</button>
-          <h2>Compartir Archivo</h2>
+          <button class="modal-close" id="closeModal" data-i18n-aria="close" data-i18n-title="close">&times;</button>
+          <h2 data-i18n="shareFile"></h2>
           <div id="qrContainer" data-testid="qr"></div>
           <div class="file-info-modal">
-            <p><strong>Archivo:</strong> <span id="modalFileName"></span></p>
-            <p><strong>URL:</strong> <span id="modalFileUrl" data-testid="pairing-url"></span></p>
+            <p><strong data-i18n="fileLabel"></strong> <span id="modalFileName"></span></p>
+            <p><strong data-i18n="urlLabel"></strong> <span id="modalFileUrl" data-testid="pairing-url"></span></p>
           </div>
           <div id="transferProgress">
-            <p style="font-weight: 600; margin-bottom: 12px;">Progreso de transferencia:</p>
+            <p style="font-weight: 600; margin-bottom: 12px;" data-i18n="progressLabel"></p>
             <div id="progressBar"><div id="progressFill"></div></div>
             <div id="progressText"></div>
           </div>
-          <button id="copyUrlBtn" class="btn btn-secondary" style="width: 100%; margin-top: 16px;">Copiar URL</button>
+          <button id="copyUrlBtn" class="btn btn-secondary" style="width: 100%; margin-top: 16px;" data-i18n="copyUrl"></button>
         </div>
       </div>
     `;
+    applyI18n(app);
 
     document.getElementById('selectBtn').addEventListener('click', () => this.selectFile());
     document.getElementById('fileInput').addEventListener('change', (e) => {
@@ -381,9 +510,9 @@ class QRShareApp {
       let actionBtn = '';
 
       if (!fileInfo.shared) {
-        actionBtn = `<button class="btn btn-primary share-btn" data-testid="share" data-file-id="${fileId}" style="padding: 6px 12px; font-size: 0.9em;">Compartir</button>`;
+        actionBtn = `<button class="btn btn-primary share-btn" data-testid="share" data-file-id="${fileId}" style="padding: 6px 12px; font-size: 0.9em;">${t('share')}</button>`;
       } else {
-        actionBtn = `<button class="btn btn-secondary show-qr-btn" data-testid="show-qr" data-file-id="${fileId}" style="padding: 6px 12px; font-size: 0.9em;">Ver QR</button>`;
+        actionBtn = `<button class="btn btn-secondary show-qr-btn" data-testid="show-qr" data-file-id="${fileId}" style="padding: 6px 12px; font-size: 0.9em;">${t('showQr')}</button>`;
       }
 
       row.innerHTML = `
@@ -404,11 +533,11 @@ class QRShareApp {
   }
 
   getStatusText (status, progress) {
-    if (status === 'pending') return 'Pendiente';
-    if (status === 'transferring') return `Transfiriendo ${progress}%`;
-    if (status === 'sent') return 'Enviado';
-    if (status === 'completed') return 'Completado';
-    return 'Compartido';
+    if (status === 'pending') return t('statusPending');
+    if (status === 'transferring') return t('statusTransferring', { progress });
+    if (status === 'sent') return t('statusSent');
+    if (status === 'completed') return t('statusCompleted');
+    return t('statusShared');
   }
 
   shareFile (fileId) {
@@ -426,7 +555,7 @@ class QRShareApp {
     try {
       url = this.pairingUrl();
     } catch (error) {
-      this.reportFailure('Todavía no hay conexión', error);
+      this.reportFailure(t('errNotReady'), error);
       return;
     }
 
@@ -450,7 +579,7 @@ class QRShareApp {
   copyUrl () {
     const url = document.getElementById('modalFileUrl').textContent;
     navigator.clipboard.writeText(url).catch((error) => {
-      this.reportFailure('No se pudo copiar la URL', error);
+      this.reportFailure(t('errCopy'), error);
     });
   }
 
@@ -459,21 +588,21 @@ class QRShareApp {
       // El QR va en una sola dirección: aquí es donde el emisor se entera de con
       // qué llave sellar la respuesta. Sin las dos, no hay conversación.
       if (typeof msg.publickey !== 'string' || typeof msg.encPub !== 'string') {
-        this.reportFailure('El otro dispositivo no envió sus llaves', errorWithCode(
+        this.reportFailure(t('errNoPeerKeys'), errorWithCode(
           'hello without pairing keys', 'unsealed'));
         return;
       }
       this.peer = { publickey: msg.publickey, encPub: msg.encPub };
       console.log('[qrshare] receiver paired');
       this.createOffer(this.currentFileId).catch((error) => {
-        this.reportFailure('No se pudo enviar la oferta', error);
+        this.reportFailure(t('errOffer'), error);
       });
     }
     else if (msg.type === 'answer') {
       console.log('[qrshare] answer received');
       if (this.pc) {
         this.pc.setRemoteDescription(new RTCSessionDescription(msg.sdp))
-          .catch((error) => this.reportFailure('Respuesta inválida', error));
+          .catch((error) => this.reportFailure(t('errAnswer'), error));
       }
     }
     else if (msg.type === 'ice') {
@@ -490,7 +619,7 @@ class QRShareApp {
     pc.onicecandidate = (e) => {
       if (e.candidate) {
         this.sendSignal({ type: 'ice', candidate: e.candidate })
-          .catch((error) => this.reportFailure('No se pudo enviar un candidato', error));
+          .catch((error) => this.reportFailure(t('errCandidate'), error));
       }
     };
     return pc;
@@ -585,7 +714,7 @@ class QRShareApp {
   onReceiverReady () {
     console.log('[qrshare] receiver ready');
     this.notifySender().catch((error) => {
-      this.reportFailure('No se pudo avisar al emisor', error);
+      this.reportFailure(t('errHello'), error);
     });
   }
 
@@ -594,7 +723,7 @@ class QRShareApp {
     app.innerHTML = `
       <div class="receiver-container">
         <h1>QRShare</h1>
-        <p class="subtitle">Recepción de archivo</p>
+        <p class="subtitle" data-i18n="receiverSubtitle"></p>
 
         <div id="appError" class="error" style="display: none;"></div>
 
@@ -603,16 +732,18 @@ class QRShareApp {
           <div class="receiver-file-detail" id="receiverFileSize"></div>
         </div>
 
-        <div id="receiverStatus" data-testid="receiver-status">Conectando...</div>
+        <div id="receiverStatus" data-testid="receiver-status"></div>
 
         <div id="progressContainerReceiver">
           <div id="progressBar"><div id="progressFill"></div></div>
           <div id="progressText"></div>
         </div>
 
-        <button id="downloadBtn" class="btn btn-primary" data-testid="download">Descargar Archivo</button>
+        <button id="downloadBtn" class="btn btn-primary" data-testid="download" data-i18n="download"></button>
       </div>
     `;
+    applyI18n(app);
+    this.updateStatus('connecting');
   }
 
   /** Un enlace de una versión anterior, o roto: se dice, no se atiende a medias. */
@@ -621,13 +752,11 @@ class QRShareApp {
     app.innerHTML = `
       <div class="receiver-container">
         <h1>QRShare</h1>
-        <div class="error" data-testid="stale-link">
-          Este enlace no sirve para recibir un archivo: es de una versión anterior de
-          la app o está incompleto. Pide al otro dispositivo que muestre el QR de nuevo.
-        </div>
-        <p><a href="./">Empezar de nuevo</a></p>
+        <div class="error" data-testid="stale-link" data-i18n="staleLink"></div>
+        <p><a href="./" data-i18n="startOver"></a></p>
       </div>
     `;
+    applyI18n(app);
   }
 
   /**
@@ -641,22 +770,34 @@ class QRShareApp {
       publickey: this.publickey,
       encPub: this.encPub,
     });
-    this.updateStatus('Esperando archivo...');
+    this.updateStatus('waitingFile');
   }
 
-  updateStatus (text, isError = false) {
+  /**
+   * Estado del receptor. Recibe una CLAVE de I18N (o un texto ya traducido cuando
+   * viene de `reportFailure`): se recuerda cuál fue para repintarla si cambia el idioma.
+   */
+  updateStatus (keyOrText, isError = false) {
+    this._status = { keyOrText, isError };
     const statusEl = document.getElementById('receiverStatus');
     if (statusEl) {
-      statusEl.textContent = text;
+      statusEl.textContent = I18N.es[keyOrText] !== undefined ? t(keyOrText) : keyOrText;
       statusEl.className = isError ? 'error' : '';
     }
+  }
+
+  /** Cambio de idioma desde el topbar: se traduce lo pintado sin tocar el estado. */
+  onLangChange () {
+    applyI18n();
+    if (this.role === 'sender' && this.files.size) this.updateFilesTable();
+    if (this._status) this.updateStatus(this._status.keyOrText, this._status.isError);
   }
 
   handleReceiverMessage (msg) {
     if (msg.type === 'offer') {
       console.log('[qrshare] offer received');
       this.createAnswer(msg.sdp).catch((error) => {
-        this.reportFailure('No se pudo responder a la oferta', error);
+        this.reportFailure(t('errReply'), error);
       });
     }
     else if (msg.type === 'ice') {
@@ -689,7 +830,7 @@ class QRShareApp {
           document.getElementById('receiverFileName').textContent = msg.name;
           document.getElementById('receiverFileSize').textContent = this.formatSize(msg.size);
           document.getElementById('progressContainerReceiver').style.display = 'block';
-          this.updateStatus('Recibiendo...');
+          this.updateStatus('receiving');
         }
         else if (msg.type === 'end') {
           this.completeTransfer();
@@ -711,7 +852,7 @@ class QRShareApp {
 
     this.dc.onerror = (e) => {
       console.error('[qrshare] data channel error:', e);
-      this.updateStatus('Error en la transferencia', true);
+      this.updateStatus('transferError', true);
     };
   }
 
@@ -729,7 +870,7 @@ class QRShareApp {
       a.click();
     };
 
-    this.updateStatus('✓ Transferencia completada');
+    this.updateStatus('transferDone');
     document.getElementById('progressFill').style.width = '100%';
     downloadBtn.click();
   }
